@@ -1,8 +1,6 @@
 package im.baas.sandbox.ignite;
 
-import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteSpringBean;
-import org.apache.ignite.Ignition;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.logger.slf4j.Slf4jLogger;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +15,8 @@ public class IgniteAutoConfiguration {
     public IgniteConfiguration igniteConfiguration() {
         IgniteConfiguration configuration = new IgniteConfiguration();
         configuration.setGridLogger(new Slf4jLogger());
-
+        configuration.setLifecycleBeans(new IgniteLifecycleListener());
+        configuration.setMetricsLogFrequency(0);
         return configuration;
 //        new IgniteConfiguration(
 //                discoSpi: new TcpDiscoverySpi(
@@ -45,6 +44,7 @@ public class IgniteAutoConfiguration {
 //                ]
 //        )
     }
+
     @Bean(destroyMethod = "close")
     public IgniteSpringBean ignite() {
         IgniteSpringBean springBean = new IgniteSpringBean();
